@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     openssh-client \
     perl \
     jq \
+    python3 \
  && rm -rf /var/lib/apt/lists/*
 
 # Mise à jour de npm vers la dernière version
