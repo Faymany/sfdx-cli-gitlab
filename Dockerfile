@@ -48,5 +48,12 @@ RUN npm install -g @salesforce/cli@${SF_CLI_VERSION} \
  && echo y | sf plugins install @salesforce/plugin-community@${PLUGIN_COMMUNITY_VERSION} \
  && npm cache clean --force
 
-# Vérification : l'image doit exposer le CLI et ses plugins
-RUN sf version --verbose && sf plugins --core
+# Vérification : l'image doit exposer le CLI et les trois plugins attendus.
+# (sf version --verbose est évité : il plante dans un contexte de build Docker.)
+RUN sf --version \
+ && sf plugins > /tmp/plugins.txt \
+ && cat /tmp/plugins.txt \
+ && grep -q '^sfdx-git-delta ' /tmp/plugins.txt \
+ && grep -q '^@corekraft/flow-linter ' /tmp/plugins.txt \
+ && grep -q '^community ' /tmp/plugins.txt \
+ && rm /tmp/plugins.txt
